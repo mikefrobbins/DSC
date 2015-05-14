@@ -162,6 +162,7 @@ function Publish-MrDSCResourceToSMB {
         [string[]]$Name,
 
         [Parameter(Mandatory)]
+        [ValidateScript({Test-Path -Path $_ -PathType Container})]
         [string]$SMBPath
 
     )
