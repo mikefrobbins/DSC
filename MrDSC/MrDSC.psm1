@@ -140,7 +140,10 @@ function Publish-MrDSCResourceToSMB {
     The UNC path of the SMB share used as the DSC pull server.
  
 .EXAMPLE
-     Publish-MrDSCResourceToSMB -Name xSMBShare -SMBPath \\Server01\Share
+     Publish-MrDSCResourceToSMB -Name xSMBShare, xFirewall -SMBPath \\Server01\Share
+
+.EXAMPLE
+     'xSMBShare', 'xFirewall' | Publish-MrDSCResourceToSMB -SMBPath \\Server01\Share
  
 .INPUTS
     String
@@ -159,6 +162,14 @@ function Publish-MrDSCResourceToSMB {
 
         [Parameter(Mandatory,
                    ValueFromPipeline)]
+        [ValidateScript({
+            If (Get-DscResource -Name $_) {
+                $True
+            }
+            else {
+                Throw "$_ is not a valid DSC resource name or was not found on $env:COMPUTERNAME."
+            }
+        })]
         [string[]]$Name,
 
         [Parameter(Mandatory)]
