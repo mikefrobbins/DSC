@@ -124,6 +124,36 @@ function Publish-MrMOFToSMB {
 
 function Publish-MrDSCResourceToSMB {
 
+<#
+.SYNOPSIS
+    Publishes the module(s) of the specified DSC Resource(s) an SMB based DSC pull server.
+ 
+.DESCRIPTION
+    Publish-MrDSCResourceToSMB is an advanced PowerShell function that publishes one or more DSC resource
+    modules to the an SMB based DSC server pull server.
+ 
+.PARAMETER Name
+    The name of the DSC resource. This is not necessarily the same as the root module containing the DSC
+    resource.
+
+.PARAMETER SMBPath
+    The UNC path of the SMB share used as the DSC pull server.
+ 
+.EXAMPLE
+     Publish-MrDSCResourceToSMB -Name xSMBShare -SMBPath \\Server01\Share
+ 
+.INPUTS
+    String
+ 
+.OUTPUTS
+    None
+ 
+.NOTES
+    Author:  Mike F Robbins
+    Website: http://mikefrobbins.com
+    Twitter: @mikefrobbins
+#>
+
     [CmdletBinding()]
     param (
 
