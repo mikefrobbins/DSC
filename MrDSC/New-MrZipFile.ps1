@@ -32,7 +32,7 @@ function New-MrZipFile {
     $Directory = Resolve-Path -Path $Directory
     Write-Verbose -Message "Directory changed to the fully qualified path: '$Directory'"
 
-    $FileName = Join-Path -Path (Resolve-Path -Path (Split-Path -Parent $FileName)) -ChildPath (Split-Path -Leaf $FileName)
+    $FileName = Join-Path -Path (Resolve-Path -Path (Split-Path -Parent $FileName)).ProviderPath -ChildPath (Split-Path -Leaf $FileName)
     Write-Verbose -Message "FileName changed to the fully qualified path: '$FileName'"
 
     if ($PSBoundParameters.Force -and (Test-Path -Path $FileName)) {
