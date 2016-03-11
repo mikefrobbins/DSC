@@ -41,6 +41,6 @@ function New-MrZipFile {
     }
 
     Add-Type -AssemblyName System.IO.Compression.FileSystem
-    [System.IO.Compression.ZipFile]::CreateFromDirectory($Directory, $FileName, 'fastest', $true)
+    [System.IO.Compression.ZipFile]::CreateFromDirectory($Directory, $FileName, 'fastest', $false)
 
 }
