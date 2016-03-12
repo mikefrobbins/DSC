@@ -62,8 +62,8 @@ function Publish-MrDSCResourceToSMB {
             $Guid = New-MrGuid
             $ResourceInfo = Get-MrDSCResourceModulePath -Name $N        
 
-            New-MrZipFile -Directory "$($ResourceInfo.ModulePath)" -FileName "$($SMBPath)\$($ResourceInfo.Module)_$($ResourceInfo.ModuleVersion).zip"
-            New-DSCCheckSum -ConfigurationPath "$($SMBPath)\$($ResourceInfo.Module)_$($ResourceInfo.ModuleVersion).zip" -OutPath "$SMBPath"
+            New-MrZipFile -Directory "$($ResourceInfo.ModulePath)" -FileName "$($SMBPath)\$($ResourceInfo.Module)_$($ResourceInfo.ModuleVersion).zip" -Force
+            New-DSCCheckSum -ConfigurationPath "$($SMBPath)\$($ResourceInfo.Module)_$($ResourceInfo.ModuleVersion).zip" -OutPath "$SMBPath" -Force
 
         }
 
