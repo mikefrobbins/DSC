@@ -3,18 +3,18 @@ function Publish-MrDSCResourceToSMB {
 
 <#
 .SYNOPSIS
-    Publishes the module(s) of the specified DSC Resource(s) an SMB based DSC pull server.
+    Publishes the module(s) of the specified DSC Resource(s) to an SMB based DSC pull server.
  
 .DESCRIPTION
     Publish-MrDSCResourceToSMB is an advanced PowerShell function that publishes one or more DSC resource
-    modules to the an SMB based DSC server pull server.
+    modules to an SMB based DSC server pull server.
  
 .PARAMETER Name
     The name of the DSC resource. This is not necessarily the same as the root module containing the DSC
     resource.
 
 .PARAMETER SMBPath
-    The UNC path of the SMB share used as the DSC pull server.
+    The UNC path of the SMB share used as the DSC pull server for DSC Resource distribution.
  
 .EXAMPLE
      Publish-MrDSCResourceToSMB -Name xSMBShare, xFirewall -SMBPath \\Server01\Share
