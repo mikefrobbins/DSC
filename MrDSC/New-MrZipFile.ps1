@@ -1,6 +1,40 @@
 ﻿#Requires -Version 4.0
 function New-MrZipFile {
 
+<#
+.SYNOPSIS
+    Creates a new zip file or archive from the files in the specified folder.
+ 
+.DESCRIPTION
+    The New-MrZipFile function creates a new zip (or compressed) archive file from the files in the
+    specified folder. An archive file allows multiple files to be packaged, and optionally compressed,
+    into a single zipped file for easier distribution and storage.
+ 
+.PARAMETER Directory
+    Specifies the path to the folder that you want to add to the archive zipped file.
+
+.PARAMETER FileName
+    Specifies the path to the archive output file. The specified FileName value should include the desired
+    name of the output zipped file; it specifies either the absolute or relative path to the zipped file.
+
+.PARAMETER Force
+    Forces an existing zip or archive file to be overwritten.
+
+.EXAMPLE
+     New-MrZipFile -Directory 'C:\FolderToZip -FileName '\\Server01\SMBShare\MyArchive.zip' -Force
+ 
+.INPUTS
+    None
+ 
+.OUTPUTS
+    System.IO.FileInfo
+ 
+.NOTES
+    Author:  Mike F Robbins
+    Website: http://mikefrobbins.com
+    Twitter: @mikefrobbins
+#>
+
     [CmdletBinding()]
     param (
         [ValidateScript({
