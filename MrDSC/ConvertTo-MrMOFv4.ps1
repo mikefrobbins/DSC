@@ -1,6 +1,39 @@
 ﻿#Requires -Version 4.0
 function ConvertTo-MrMOFv4 {
 
+<#
+.SYNOPSIS
+    Removes items from a MOF configuration file that are incompatible with PowerShell version 4.
+ 
+.DESCRIPTION
+    The ConvertTo-MrMOFv4 function removes specific items from a MOF configuration file that was
+    created on a machine running PowerShell version 5 to make the MOF file compatible with a
+    machine running PowerShell version 4.
+ 
+.PARAMETER Path
+    Path to the MOF configuration files to convert.
+
+.PARAMETER $Pattern
+    Hidden parameter that can be used to remove different patterns from a MOF configuration file.
+
+.EXAMPLE
+     ConvertTo-MrMOFv4 -Path C:\MofFiles\config.mof
+
+.EXAMPLE
+     Get-ChildItem -Path C:\MofFiles | ConvertTo-MrMOFv4
+ 
+.INPUTS
+    String
+ 
+.OUTPUTS
+    None
+ 
+.NOTES
+    Author:  Mike F Robbins
+    Website: http://mikefrobbins.com
+    Twitter: @mikefrobbins
+#>
+
     [CmdletBinding()]
     param (
         [Parameter(Mandatory,
