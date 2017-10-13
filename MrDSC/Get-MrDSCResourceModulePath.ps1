@@ -12,8 +12,14 @@ function Get-MrDSCResourceModulePath {
 .PARAMETER Name
     DSC resource name.
 
+.PARAMETER Module
+    The name of the module containing the DSC resource.
+
 .EXAMPLE
      Get-MrDSCResourceModulePath -Name Archive
+
+.EXAMPLE
+     Get-MrDSCResourceModulePath -Name xNetworking
  
 .INPUTS
     None
@@ -27,15 +33,29 @@ function Get-MrDSCResourceModulePath {
     Twitter: @mikefrobbins
 #>
 
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName='Name')]
     param (
-        [Parameter(Mandatory)]
-        [string[]]$Name
+        [Parameter(Mandatory,
+                   ParameterSetName='Name')]
+        [string[]]$Name,
+
+        [Parameter(Mandatory,
+                   ParameterSetName='Module')]
+        [string[]]$Module
     )
 
-    $DSCResouces = Get-DscResource -Name $Name
+    $Params = @{}
     
-    foreach ($DSCResource in $DSCResouces) {
+    if ($PSBoundParameters.Name){
+        $DSCResources = Get-DscResource -Name $Name
+    }
+    else {
+        $DSCResources += foreach ($M in $Module) {
+            Get-DscResource -Module $M
+        }
+    }
+    
+    foreach ($DSCResource in $DSCResources) {
         
         try {
             $ModuleInfo = Get-Module -Name $DSCResource.Module -ListAvailable -ErrorAction Stop
