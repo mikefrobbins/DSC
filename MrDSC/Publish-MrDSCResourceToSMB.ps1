@@ -13,6 +13,9 @@ function Publish-MrDSCResourceToSMB {
     The name of the DSC resource. This is not necessarily the same as the root module containing the DSC
     resource.
 
+.PARAMETER Module
+    The name of the module containing the DSC resource.
+
 .PARAMETER SMBPath
     The UNC path of the SMB share used as the DSC pull server for DSC Resource distribution.
  
@@ -34,11 +37,12 @@ function Publish-MrDSCResourceToSMB {
     Twitter: @mikefrobbins
 #>
 
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName='Name')]
     param (
 
         [Parameter(Mandatory,
-                   ValueFromPipeline)]
+                   ValueFromPipeline,
+                   ParameterSetName='Name')]
         [ValidateScript({
             If (Get-DscResource -Name $_) {
                 $True
@@ -49,6 +53,19 @@ function Publish-MrDSCResourceToSMB {
         })]
         [string[]]$Name,
 
+        [Parameter(Mandatory,
+                   ValueFromPipelineByPropertyName,
+                   ParameterSetName='Module')]
+        [ValidateScript({
+            If (Get-DscResource -Module $_) {
+                $True
+            }
+            else {
+                Throw "$_ is not a valid DSC resource module or was not found on $env:COMPUTERNAME."
+            }
+        })]
+        [string[]]$Module,
+
         [Parameter(Mandatory)]
         [ValidateScript({Test-Path -Path $_ -PathType Container})]
         [string]$SMBPath
@@ -56,14 +73,23 @@ function Publish-MrDSCResourceToSMB {
     )
 
     PROCESS {
+        $Params = @{}
 
-        foreach ($N in $Name) {
+        if ($PSBoundParameters.Name){
+            $Params.Name = $Name
+        }
+        else {
+           $Params.Module = $Module
+        }
+        
+        $DSCResources = Get-MrDSCResourceModulePath @Params
+                
+        foreach ($DSCResource in $DSCResources) {
 
-            $Guid = New-MrGuid
-            $ResourceInfo = Get-MrDSCResourceModulePath -Name $N        
+            $Guid = New-MrGuid                   
 
-            New-MrZipFile -Directory "$($ResourceInfo.ModulePath)" -FileName "$($SMBPath)\$($ResourceInfo.Module)_$($ResourceInfo.ModuleVersion).zip" -Force
-            New-DSCCheckSum -ConfigurationPath "$($SMBPath)\$($ResourceInfo.Module)_$($ResourceInfo.ModuleVersion).zip" -OutPath "$SMBPath" -Force
+            New-MrZipFile -Directory "$($DSCResource.ModulePath)" -FileName "$($SMBPath)\$($DSCResource.Module)_$($DSCResource.ModuleVersion).zip" -Force
+            New-DSCCheckSum -ConfigurationPath "$($SMBPath)\$($DSCResource.Module)_$($DSCResource.ModuleVersion).zip" -OutPath "$SMBPath" -Force
 
         }
 
